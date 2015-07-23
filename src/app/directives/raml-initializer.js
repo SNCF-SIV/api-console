@@ -7,7 +7,7 @@
       templateUrl: 'directives/raml-initializer.tpl.html',
       replace: true,
       controller: function($scope, $window) {
-        $scope.ramlUrl    = '';
+        $scope.ramlUrl = $scope.ramlGitUrl = '';
 
         ramlParserWrapper.onParseError(function(error) {
           /*jshint camelcase: false */
@@ -39,13 +39,50 @@
           $scope.ramlStatus = 'loaded';
         });
 
+        var getGitProxyfiedUrl = function() {
+          var origin = window.location.origin;
+          var path   = window.location.pathname.split('/').slice(0, -1).join('/');
+          var url = origin +
+                    path                                    + '/' +
+                    'git/' + // TODO: make this proxification configurable
+                    ($scope.git.group || 'group')           + '/' +
+                    ($scope.git.repository || 'repository') + '/' +
+                    'raw/' +
+                    ($scope.git.tag || 'tag')               + '/' +
+                    ($scope.git.path || 'path/to/file.raml');
+          return url;
+        };
+
+        $scope.onGitUrlChange = function () {
+          $scope.errorMessage = null;
+          $scope.isLoadedFromUrl = $scope.isLoadedFromGitUrl = false;
+
+          $scope.ramlGitUrl = getGitProxyfiedUrl();
+        };
+
         $scope.onChange = function () {
           $scope.errorMessage = null;
+          $scope.isLoadedFromUrl = $scope.isLoadedFromGitUrl = false;
+        };
+
+        $scope.onKeyPressGitUrl = function ($event) {
+          if ($event.keyCode === 13) {
+            $scope.loadFromGitUrl();
+          }
         };
 
         $scope.onKeyPressRamlUrl = function ($event) {
           if ($event.keyCode === 13) {
             $scope.loadFromUrl();
+          }
+        };
+
+        $scope.loadFromGitUrl = function () {
+          if ($scope.git.group || $scope.git.repository || $scope.git.tag || $scope.git.path) {
+            $scope.ramlGitUrl      = getGitProxyfiedUrl();
+            $scope.isLoadedFromUrl = $scope.isLoadedFromGitUrl = true;
+            $scope.ramlStatus      = 'loading';
+            ramlParserWrapper.load($scope.ramlGitUrl);
           }
         };
 
@@ -68,6 +105,23 @@
         if (document.location.search.indexOf('?raml=') !== -1) {
           $scope.ramlUrl = document.location.search.replace('?raml=', '');
           $scope.loadFromUrl();
+        }
+
+        var queryParamTest = /(?=.*group=)(?=.*repository=)(?=.*tag=)(?=.*path=).*/i;
+        if (queryParamTest.test(document.location.search)) {
+
+          var gueryParamsExtract = /(group)=([^&]*)|(repository)=([^&]*)|(tag)=([^&]*)|(path)=([^&]*)/gi;
+          var match, index = 1;
+          $scope.git = {};
+          
+          /*jshint boss: true */
+          while (match = gueryParamsExtract.exec(document.location.search)) {
+            $scope.git[match[index]] = match[index + 1];
+            index += 2;
+          }
+          /*jshint boss: false */
+          
+          $scope.loadFromGitUrl();
         }
       }
     };
