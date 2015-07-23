@@ -110,11 +110,11 @@
         var queryParamTest = /(?=.*group=)(?=.*repository=)(?=.*tag=)(?=.*path=).*/i;
         if (queryParamTest.test(document.location.search)) {
 
-          var gueryParamsExtract = /(group)=([^&]*)|(repository)=([^&]*)|(tag)=([^&]*)|(path)=([^&]*)/gi;
+          var queryParamsExtract = /(group)=([^&]*)|(repository)=([^&]*)|(tag)=([^&]*)|(path)=([^&]*)/gi;
           var match, index = 1;
           $scope.git = {};
           /*jshint boss: true */
-          while (match = gueryParamsExtract.exec(document.location.search)) {
+          while (match = queryParamsExtract.exec(document.location.search)) {
             $scope.git[match[index]] = match[index + 1];
             index += 2;
           }
