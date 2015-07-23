@@ -38,9 +38,11 @@
             <span>{{errorMessage}}</span>
           </div>
 
-          <div class="raml-console-initializer-action-group" align="right">
-            <div style="position: absolute; text-align: left; width: 65%; font-size: 13px;  padding: 10px 0 12px; line-height: 24px">{{$parent.ramlGitUrl}}</div>
-            <button id="loadRamlFromGitUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" ng-click="loadFromGitUrl()">Load from Git</button>
+          <div class="raml-console-initializer-action-group" style="display: flex">
+            <p style="flex: 3; margin: 0; font-size: 13px; padding: 10px 0 12px; line-height: 24px">{{$parent.ramlGitUrl}}</p>
+            <p style="flex: 1; margin: 0; text-align: right">
+              <button id="loadRamlFromGitUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" style="width: 100%" ng-click="loadFromGitUrl()">Load from Git</button>
+            </p>
           </div>
 
         </div>
