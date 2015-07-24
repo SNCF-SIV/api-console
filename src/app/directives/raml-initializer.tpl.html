@@ -10,19 +10,19 @@
         </header>
 
         <div class="raml-console-initializer-row">
-          <div class="raml-console-initializer-input-container resource-panel-wrapper" style="display: flex" ng-class="{ 'raml-console-initializer-input-container-error': errorMessage && isLoadedFromGitUrl }">
+          <div class="raml-console-initializer-input-container resource-panel-wrapper raml-console-git-panel" ng-class="{ 'raml-console-initializer-input-container-error': errorMessage && isLoadedFromGitUrl }">
 
-            <p style="flex: 1 auto; margin: 0 16px 0 0">
+            <p class="raml-console-git-form">
               <label>Group</label>
               <input id="gitGroup" autofocus class="raml-console-initializer-input raml-console-initializer-raml-field" ng-model="$parent.git.group" ng-keypress="onKeyPressGitUrl($event)" ng-change="onGitUrlChange()">
             </p>
 
-            <p style="flex: 1 auto; margin: 0 16px 0 0">
+            <p class="raml-console-git-form">
               <label>Repository</label>
               <input id="gitRepository" class="raml-console-initializer-input raml-console-initializer-raml-field" ng-model="$parent.git.repository" ng-keypress="onKeyPressGitUrl($event)" ng-change="onGitUrlChange()">
             </p>
 
-            <p style="flex: 1 auto; margin: 0">
+            <p class="raml-console-git-form raml-console-git-form-last">
               <label>Tag</label>
               <input id="gitTag" class="raml-console-initializer-input raml-console-initializer-raml-field" ng-model="$parent.git.tag" ng-keypress="onKeyPressGitUrl($event)" ng-change="onGitUrlChange()">
             </p>
@@ -38,10 +38,10 @@
             <span>{{errorMessage}}</span>
           </div>
 
-          <div class="raml-console-initializer-action-group" style="display: flex">
-            <p style="flex: 3; margin: 0; font-size: 13px; padding: 10px 0 12px; line-height: 24px">{{$parent.ramlGitUrl}}</p>
-            <p style="flex: 1; margin: 0; text-align: right">
-              <button id="loadRamlFromGitUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" style="width: 100%" ng-click="loadFromGitUrl()">Load from Git</button>
+          <div class="raml-console-initializer-action-group raml-console-git-panel">
+            <p class="raml-console-git-url">{{$parent.ramlGitUrl}}</p>
+            <p class="raml-console-git-button-box">
+              <button id="loadRamlFromGitUrl" class="raml-console-initializer-action raml-console-initializer-action-btn" ng-click="loadFromGitUrl()">Load from Git</button>
             </p>
           </div>
 
