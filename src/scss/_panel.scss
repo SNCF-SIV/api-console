@@ -391,3 +391,32 @@
   font-weight: bold;
   // margin-left: 7px;
 }
+
+.git-panel {
+  display: flex;
+
+  .git-form {
+    flex: 1 auto; 
+    margin: 0 16px 0 0;
+    &.git-form-last {
+      flex: 1 auto;
+      margin: 0;
+    }
+  }
+
+  .git-url {
+    flex: 3;
+    margin: 0;
+    font-size: 13px;
+    padding: 10px 0 12px;
+    line-height: 24px;
+  }
+  .git-button-box {
+    flex: 1; 
+    margin: 0;
+    text-align: right;
+    .initializer-action-btn {
+      width: 100%;
+    }
+  }
+}
