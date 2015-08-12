@@ -2614,6 +2614,38 @@ a.raml-console-resource-path-active {
   font-weight: bold;
 }
 
+.raml-console-git-panel {
+  display: flex;
+}
+
+.raml-console-git-panel .raml-console-git-form {
+  flex: 1 auto;
+  margin: 0 16px 0 0;
+}
+
+.raml-console-git-panel .raml-console-git-form.raml-console-git-form-last {
+  flex: 1 auto;
+  margin: 0;
+}
+
+.raml-console-git-panel .raml-console-git-url {
+  flex: 3;
+  margin: 0;
+  font-size: 13px;
+  padding: 10px 0 12px;
+  line-height: 24px;
+}
+
+.raml-console-git-panel .raml-console-git-button-box {
+  flex: 1;
+  margin: 0;
+  text-align: right;
+}
+
+.raml-console-git-panel .raml-console-git-button-box .raml-console-initializer-action-btn {
+  width: 100%;
+}
+
 .raml-console-sidebar {
   width: 0;
   flex-shrink: 0;
@@ -3299,7 +3331,7 @@ a.raml-console-resource-path-active {
 }
 
 .raml-console-sidebar-input-reset:before {
-  content: "↪";
+  content: "â†ª";
   display: block;
   -webkit-transform: rotate(-180deg);
 }
