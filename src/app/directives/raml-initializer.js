@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/raml-initializer.tpl.html',
       replace: true,
-      controller: function($scope, $window) {
+      controller: function($scope, $window, $http, $q) {
         $scope.ramlUrl = $scope.ramlGitUrl = '';
 
         ramlParserWrapper.onParseError(function(error) {
@@ -48,7 +48,7 @@
                     ($scope.git.group || 'group')           + '/' +
                     ($scope.git.repository || 'repository') + '/' +
                     'raw/' +
-                    ($scope.git.tag || 'tag')               + '/' +
+                    ($scope.git.tag || 'master')               + '/' +
                     ($scope.git.path || 'path/to/file.raml');
           return url;
         };
@@ -57,7 +57,8 @@
           $scope.errorMessage = null;
           $scope.isLoadedFromUrl = $scope.isLoadedFromGitUrl = false;
 
-          $scope.ramlGitUrl = getGitProxyfiedUrl();
+          var proxyfiedUrl = getGitProxyfiedUrl();
+          $scope.ramlGitUrl = proxyfiedUrl;
         };
 
         $scope.onChange = function () {
@@ -77,12 +78,81 @@
           }
         };
 
+        var getGitAccessToken = function() {
+          return 'your Gitlab API token here';
+        };
+
+        var getGitLocalPath = function() {
+          return 'git/';
+        };
+
+        var checkGroupAvailability = function(providedGroupName) {
+          var origin = window.location.origin;
+          var path   = window.location.pathname.split('/').slice(0, -1).join('/');
+          var groupsUrl = origin +
+                     path  + '/' +
+                     getGitLocalPath() +
+                    'api/v3/groups' + '?private_token=' + getGitAccessToken();
+
+          return $http({method: 'GET', url: groupsUrl})
+                .then(function(response) {
+                  var foundGroup = null;
+                  response.data.forEach(function(g) {
+                  if(g.name === providedGroupName) {
+                      foundGroup = g;
+                    }
+                  });
+
+                  if(!foundGroup){
+                    return $q.reject('The group \'' + providedGroupName + ' \' doesn\'t exist');
+                  } else {
+                    return foundGroup;
+                  }
+                });
+        };
+
+        var checkRepositoryAvailability = function(groupId, providedRepositoryName) {
+          var origin = window.location.origin;
+          var path   = window.location.pathname.split('/').slice(0, -1).join('/');
+          var projectsUrl = origin +
+                     path  + '/' +
+                    getGitLocalPath() +
+                    'api/v3/groups/' + groupId + '?private_token=' + getGitAccessToken();
+
+          return $http({method: 'GET', url: projectsUrl})
+            .then(function(response) {
+              var foundProject = null;
+              response.data.projects.forEach(function(p) {
+                if(p.name === providedRepositoryName) {
+                  foundProject = p;
+                }
+              });
+              if(!foundProject) {
+                return $q.reject('The repository \'' + providedRepositoryName + ' \' doesn\'t exist');
+              } else {
+                return foundProject;
+              }
+           });
+        };
+
         $scope.loadFromGitUrl = function () {
           if ($scope.git.group || $scope.git.repository || $scope.git.tag || $scope.git.path) {
             $scope.ramlGitUrl      = getGitProxyfiedUrl();
             $scope.isLoadedFromUrl = $scope.isLoadedFromGitUrl = true;
-            $scope.ramlStatus      = 'loading';
-            ramlParserWrapper.load($scope.ramlGitUrl);
+
+           checkGroupAvailability($scope.git.group).then(
+             function(foundGroup){
+              return checkRepositoryAvailability(foundGroup.id, $scope.git.repository);
+            }).then(
+              function() {
+                $scope.ramlStatus      = 'loading';
+                ramlParserWrapper.load($scope.ramlGitUrl);
+              }
+            ).catch(
+              function(reason) {
+               $scope.errorMessage = reason;
+              }
+            );
           }
         };
 
@@ -113,14 +183,14 @@
           var queryParamsExtract = /(group)=([^&]*)|(repository)=([^&]*)|(tag)=([^&]*)|(path)=([^&]*)/gi;
           var match, index = 1;
           $scope.git = {};
-          
+
           /*jshint boss: true */
           while (match = queryParamsExtract.exec(document.location.search)) {
             $scope.git[match[index]] = match[index + 1];
             index += 2;
           }
           /*jshint boss: false */
-          
+
           $scope.loadFromGitUrl();
         }
       }
