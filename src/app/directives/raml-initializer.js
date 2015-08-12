@@ -98,7 +98,7 @@
                 .then(function(response) {
                   var foundGroup = null;
                   response.data.forEach(function(g) {
-                  if(g.name === providedGroupName) {
+                  if(g.path === providedGroupName) {
                       foundGroup = g;
                     }
                   });
@@ -123,7 +123,7 @@
             .then(function(response) {
               var foundProject = null;
               response.data.projects.forEach(function(p) {
-                if(p.name === providedRepositoryName) {
+                if(p.path === providedRepositoryName) {
                   foundProject = p;
                 }
               });
@@ -177,10 +177,10 @@
           $scope.loadFromUrl();
         }
 
-        var queryParamTest = /(?=.*group=)(?=.*repository=)(?=.*tag=)(?=.*path=).*/i;
+        var queryParamTest = /(?=.*group=)(?=.*repository=)(?=.*branch=)(?=.*path=).*/i;
         if (queryParamTest.test(document.location.search)) {
 
-          var queryParamsExtract = /(group)=([^&]*)|(repository)=([^&]*)|(tag)=([^&]*)|(path)=([^&]*)/gi;
+          var queryParamsExtract = /(group)=([^&]*)|(repository)=([^&]*)|(branch)=([^&]*)|(path)=([^&]*)/gi;
           var match, index = 1;
           $scope.git = {};
 
