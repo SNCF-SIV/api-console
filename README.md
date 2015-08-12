@@ -59,6 +59,19 @@ You will need to specify a fixed height for the iframe that fits into the design
 2. To use **Try It** functionality within the console, your API needs to enable CORS from the console's domain, or you need to use a proxy.
 3. To load a RAML from Gitlab (by specifying group/repository/tag/path), you'll need to forward your Gitlab (`http://<server>/gitlab`) to the  same domain as the console. By default, behind '/git'. (i.e : let's consider you provide your API console through `http://<server>:<port>/api`, then your gitlab will be available at `http://<server>:<port>/api`).
 
+## Sharing URL
+
+A Raml file path can be read from the query parameter `raml=path-to-raml`. (don't forget to provide a same domain URL)
+for example :
+```
+http://<server>/api/index.html?raml=http://<server>/api/git/mygroup/myrepo/raw/master/test.raml
+```
+
+A Raml file can also be loaded from gitlab by providing query parameter `?group=GG&repository=RR&branch=BB&path=PP`.
+```
+http://<server>/api/index.html?group=mygroup&repository=myrepo&tag=master&path=test.raml
+```
+
 ## Configuration
 
 ### Proxying
