@@ -57,6 +57,20 @@ You will need to specify a fixed height for the iframe that fits into the design
 
 1. Your RAML document needs to be hosted on the same domain as the console, or on a domain that allows [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) requests from your domain.
 2. To use **Try It** functionality within the console, your API needs to enable CORS from the console's domain, or you need to use a proxy.
+3. To load a RAML from Gitlab (by specifying group/repository/tag/path), you'll need to forward your Gitlab (`http://<server>/gitlab`) to the  same domain as the console. By default, behind '/git'. (i.e : let's consider you provide your API console through `http://<server>:<port>/api`, then your gitlab will be available at `http://<server>:<port>/api`).
+
+## Sharing URL
+
+A Raml file path can be read from the query parameter `raml=path-to-raml`. (don't forget to provide a same domain URL)
+for example :
+```
+http://<server>/api/index.html?raml=http://<server>/api/git/mygroup/myrepo/raw/master/test.raml
+```
+
+A Raml file can also be loaded from gitlab by providing query parameter `?group=GG&repository=RR&branch=BB&path=PP`.
+```
+http://<server>/api/index.html?group=mygroup&repository=myrepo&tag=master&path=test.raml
+```
 
 ## Configuration
 
@@ -80,7 +94,7 @@ Given the above, OAuth 2 requests would redirect back to that URL.
 
 ### Single View Mode
 
-In *Single View* mode you will be able to see only documentation or try-it. 
+In *Single View* mode you will be able to see only documentation or try-it.
 
     <raml-console src="path-to-raml" single-view></raml-console>
 
@@ -150,11 +164,21 @@ To run tests, you'll need the following:
 1. Install the console's NPM packages - `npm install`
 1. Run  `node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update`
 
+### Gitlab API Token
+In order to check Git group and repository's availability, API console uses Gitlab's API.
+Your Gitlab API Token has to be provided in `raml-initializer.js` inside :
+
+```js
+var getGitAccessToken = function() {
+  return 'your Gitlab API token here';
+};
+```
+Also make sure that the account associated is member (`Guest` is enough) of the groups you want to get the raml from.
+
 ### Running Tests
 
     $ grunt regression
-    
+
 ## Contributor's Agreement
 
-To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43 
-
+To contribute source code to this repository, please read our [contributor's agreement](http://www.mulesoft.org/legal/contributor-agreement.html), and then execute it by running this notebook and following the instructions: https://api-notebook.anypoint.mulesoft.com/notebooks/#380297ed0e474010ff43
