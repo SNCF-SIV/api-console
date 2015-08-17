@@ -48,7 +48,7 @@
                     ($scope.git.group || 'group')           + '/' +
                     ($scope.git.repository || 'repository') + '/' +
                     'raw/' +
-                    ($scope.git.tag || 'master')               + '/' +
+                    ($scope.git.branch || 'master')               + '/' +
                     ($scope.git.path || 'path/to/file.raml');
           return url;
         };
@@ -136,7 +136,7 @@
         };
 
         $scope.loadFromGitUrl = function () {
-          if ($scope.git.group || $scope.git.repository || $scope.git.tag || $scope.git.path) {
+          if ($scope.git.group || $scope.git.repository || $scope.git.branch || $scope.git.path) {
             $scope.ramlGitUrl      = getGitProxyfiedUrl();
             $scope.isLoadedFromUrl = $scope.isLoadedFromGitUrl = true;
 
