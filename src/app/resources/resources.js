@@ -12,8 +12,8 @@
       controller: ['$scope', '$window', '$attrs', function($scope, $window, $attrs) {
         $scope.proxy                  = $window.RAML.Settings.proxy;
         $scope.disableTitle           = false;
-        $scope.resourcesCollapsed     = false;
-        $scope.documentationCollapsed = false;
+        $scope.resourcesCollapsed     = true;
+        $scope.documentationCollapsed = true;
         $scope.credentials = {};
         $scope.allowUnsafeMarkdown    = false;
 
