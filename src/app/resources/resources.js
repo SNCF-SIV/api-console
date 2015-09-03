@@ -12,8 +12,8 @@
       controller: function($scope, $window, $attrs) {
         $scope.proxy                  = $window.RAML.Settings.proxy;
         $scope.disableTitle           = false;
-        $scope.resourcesCollapsed     = false;
-        $scope.documentationCollapsed = false;
+        $scope.resourcesCollapsed     = true;
+        $scope.documentationCollapsed = true;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
