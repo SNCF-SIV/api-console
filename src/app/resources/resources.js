@@ -16,7 +16,7 @@
         $scope.documentationCollapsed = true;
         $scope.credentials = {};
         $scope.allowUnsafeMarkdown    = false;
-
+        $scope.initCollapse = true;
         if ($attrs.hasOwnProperty('allowUnsafeMarkdown')) {
           $scope.allowUnsafeMarkdown = true;
         }
