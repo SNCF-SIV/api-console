@@ -14,6 +14,7 @@
         $scope.disableTitle           = false;
         $scope.resourcesCollapsed     = true;
         $scope.documentationCollapsed = true;
+        $scope.initCollapse = true;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
