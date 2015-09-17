@@ -144,7 +144,7 @@
           // Hack for codemirror
           setTimeout(function () {
             var editors = jQuery('.raml-console-sidebar-content-wrapper #sidebar-body .raml-console-codemirror-body-editor .CodeMirror');
-
+            $rootScope.$broadcast('compileImg');
             editors.map(function (index) {
               var bodyEditor = editors[index].CodeMirror;
 
