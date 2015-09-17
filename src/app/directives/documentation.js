@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/documentation.tpl.html',
       replace: true,
-      controller: function($scope) {
+      controller: function($scope, $window, $compile) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -30,6 +30,38 @@
 
           return doc;
         };
+
+        $scope.openInNewTab = function(url){
+          //In the future
+          /*if($event.target.classList.contains('raml-console-expandImg')){
+              $event.target.classList.remove('raml-console-expandImg');
+          }else{
+              $event.target.classList.add('raml-console-expandImg');
+          }*/
+          $scope.window = $window.open('', '_blank');
+          $scope.window.document.title = 'Image viewer';
+          angular.element($scope.window.document.body).append('<img src=' + url +' />');
+        };
+
+        $scope.$watch('currentStatusCode', function() {
+          setTimeout(function () {
+            addAttributeToImg();
+          }, 10);
+        });
+
+        $scope.$on('compileImg', function(){
+            addAttributeToImg();
+          });
+
+        function addAttributeToImg(){
+          var bodyImgs = jQuery('.raml-console-resource-panel img');
+          bodyImgs.map(function (index) {
+            if( !bodyImgs[index].getAttribute('ng-click')){
+                bodyImgs[index].setAttribute('ng-click','openInNewTab("'+bodyImgs[index].src+'", $event)');
+                $compile(bodyImgs[index])($scope);
+              }
+          });
+        }
 
         $scope.unique = function (arr) {
           return arr.filter (function (v, i, a) { return a.indexOf (v) === i; });
