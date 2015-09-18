@@ -468,3 +468,7 @@ a.resource-path-active {
     color: $color-sidebar-subheader-text;
   }
 }
+
+.example-container code{
+  max-height: 700px;
+}
