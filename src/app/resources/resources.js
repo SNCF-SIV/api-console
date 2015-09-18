@@ -17,6 +17,8 @@
         $scope.credentials = {};
         $scope.allowUnsafeMarkdown    = false;
         $scope.initCollapse = true;
+        $scope.maxColorizedLines = 10000;
+
         if ($attrs.hasOwnProperty('allowUnsafeMarkdown')) {
           $scope.allowUnsafeMarkdown = true;
         }

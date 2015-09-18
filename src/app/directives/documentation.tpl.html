@@ -183,7 +183,12 @@
 
           <div class="raml-console-example-container" ng-if="responseInfo[code][responseInfo[code].currentType].example">
             <p><button ng-click="showExample($event)" class="raml-console-resource-btn">Show Example</button></p>
-            <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
+            <div ng-if="responseInfo[code][responseInfo[code].currentType].example.length > maxColorizedLines">
+              <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs">{{responseInfo[code][responseInfo[code].currentType].example}}</code></pre>
+            </div>
+            <div ng-if="responseInfo[code][responseInfo[code].currentType].example.length < maxColorizedLines">
+              <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
+            </div>
           </div>
 
           <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].schema">
