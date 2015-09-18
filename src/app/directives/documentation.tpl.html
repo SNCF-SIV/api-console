@@ -128,9 +128,9 @@
         </div>
       </section>
 
-      <div ng-if="methodInfo.body[currentBodySelected].example">
-        <span>Example:</span>
-        <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].example)"></code></pre>
+      <div class="raml-console-example-container" ng-if="methodInfo.body[currentBodySelected].example">
+        <p><button ng-click="showExample($event)" class="raml-console-resource-btn">Show Example</button></p>
+        <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(methodInfo.body[currentBodySelected].example)"></code></pre>
       </div>
 
       <div class="raml-console-schema-container" ng-if="methodInfo.body[currentBodySelected].schema">
@@ -181,9 +181,9 @@
             <span ng-click="changeType($event, key, code)" ng-class="{ 'raml-console-is-active': $first}" class="raml-console-flag" ng-repeat="(key, value) in methodInfo.responses[code].body">{{key}}</span>
           </h4>
 
-          <div ng-if="responseInfo[code][responseInfo[code].currentType].example">
-            <span>Example:</span>
-            <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
+          <div class="raml-console-example-container" ng-if="responseInfo[code][responseInfo[code].currentType].example">
+            <p><button ng-click="showExample($event)" class="raml-console-resource-btn">Show Example</button></p>
+            <pre class="raml-console-resource-pre raml-console-resource-pre-toggle"><code class="raml-console-hljs" hljs source="getBeatifiedExample(responseInfo[code][responseInfo[code].currentType].example)"></code></pre>
           </div>
 
           <div class="raml-console-schema-container" ng-if="responseInfo[code][responseInfo[code].currentType].schema">
