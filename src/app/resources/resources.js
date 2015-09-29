@@ -15,6 +15,7 @@
         $scope.resourcesCollapsed     = true;
         $scope.documentationCollapsed = true;
         $scope.initCollapse = true;
+        $scope.maxColorizedLines = 10000;
 
         if ($attrs.hasOwnProperty('singleView')) {
           $scope.singleView = true;
