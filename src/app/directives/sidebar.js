@@ -117,7 +117,7 @@
           apply();
 
           var hash = 'request_' + $scope.generateId($scope.resource.pathSegments);
-
+          
           $timeout(function () {
             if (jqXhr) {
               var $editors = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror').toArray();
