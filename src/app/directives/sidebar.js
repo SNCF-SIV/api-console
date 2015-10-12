@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'directives/sidebar.tpl.html',
       replace: true,
-      controller: function ($scope, $location, $anchorScroll) {
+      controller: function ($scope, $location, $anchorScroll, $timeout) {
         var defaultSchemaKey = Object.keys($scope.securitySchemes).sort()[0];
         var defaultSchema    = $scope.securitySchemes[defaultSchemaKey];
 
@@ -119,6 +119,21 @@
           };
 
           apply();
+          $timeout(function () {
+            if (jqXhr) {
+              var $editors = jQuery('.raml-console-sidebar-content-wrapper .CodeMirror').toArray();
+
+              $editors.forEach(function (editor) {
+                var cm = editor.CodeMirror;
+                cm.setOption('mode', $scope.response.contentType);
+                cm.refresh();
+              });
+            }
+
+            jQuery('html, body').animate({
+              scrollTop: jQuery('#'+hash).offset().top + 'px'
+            }, 'fast');
+          }, 10);
         }
 
         function resolveSegementContexts(pathSegments, uriParameters) {
