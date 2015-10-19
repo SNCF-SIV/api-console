@@ -1,6 +1,6 @@
 {
   "name": "api-console",
-  "version": "2.1.0",
+  "version": "2.0.1.SNCF",
   "description": "Api-Console for RAML based app",
   "main": "index.js",
   "scripts": {
