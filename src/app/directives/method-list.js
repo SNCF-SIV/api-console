@@ -157,6 +157,8 @@
 
           if (!$resource.hasClass('raml-console-is-active')) {
             var hash = $scope.generateId($scope.resource.pathSegments);
+            //update hash. We use window.location and not $location.hash to avoid "##hash" in URL
+            window.location.hash = hash;
 
             $rootScope.$broadcast('openMethod', $scope);
             jQuery($this).addClass('raml-console-is-active');

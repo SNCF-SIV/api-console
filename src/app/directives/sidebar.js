@@ -214,7 +214,7 @@
 
           $scope.currentSchemeType           = defaultSchema.type;
           $scope.currentScheme               = defaultSchema.id;
-          $scope.currentProtocol             = $scope.raml.protocols[0];
+          $scope.currentProtocol             = $scope.raml.protocols && $scope.raml.protocols.length ? $scope.raml.protocols[0] : null;
           $scope.documentationSchemeSelected = defaultSchema;
           $scope.responseDetails             = null;
 
