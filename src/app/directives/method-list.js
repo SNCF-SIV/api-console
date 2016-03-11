@@ -157,9 +157,6 @@
 
           if (!$resource.hasClass('raml-console-is-active')) {
             var hash = $scope.generateId($scope.resource.pathSegments);
-            //update hash. We use window.location and not $location.hash to avoid "##hash" in URL
-            window.location.hash = hash;
-
             $rootScope.$broadcast('openMethod', $scope);
             jQuery($this).addClass('raml-console-is-active');
             $scope.showPanel = true;
@@ -179,6 +176,9 @@
             jQuery($this).addClass('raml-console-is-active');
             jQuery($this).siblings('.raml-console-tab').removeClass('raml-console-is-active');
           }
+
+          //update hash. We use window.location and not $location.hash to avoid "##hash" in URL
+          window.location.hash = $scope.generateId($scope.resource.pathSegments)+'@'+jQuery(':first-child', $this).text();
         };
       }]
     };
