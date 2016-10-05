@@ -26,6 +26,7 @@
       $scope.disableTitle               = $attrs.hasOwnProperty('disableTitle');
       $scope.disableTryIt               = $attrs.hasOwnProperty('disableTryIt');
       $scope.documentationCollapsed     = $attrs.hasOwnProperty('documentationCollapsed');
+      $scope.tryItInitCollapse          = $attrs.hasOwnProperty('tryItInitCollapse');
       $scope.proxy                      = $window.RAML.Settings.proxy;
       $scope.readResourceTraits         = readResourceTraits;
       $scope.resourcesCollapsed         = $attrs.hasOwnProperty('resourcesCollapsed');
