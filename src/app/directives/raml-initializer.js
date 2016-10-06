@@ -174,11 +174,10 @@
                       ).catch(
                         function(reason) {
                           $scope.vm.error = {'message':reason};
+                          $scope.vm.isLoading = false;
+                          $scope.vm.isLoadedFromGitUrl = true;
                         }
-                      ).finally(function () {
-                        $scope.vm.isLoading = false;
-                        $scope.vm.isLoadedFromGitUrl = true;
-                      });
+                      );
         }
       }
 
