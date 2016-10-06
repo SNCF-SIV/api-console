@@ -10,8 +10,8 @@
         controller:  'RamlInitializerController'
       };
     })
-    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser', function RamlInitializerController(
-      $scope, $window, ramlParser
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser','$http', '$q', function RamlInitializerController(
+      $scope, $window, ramlParser, $http, $q
     ) {
       $scope.vm = {
         codeMirror: {
@@ -79,10 +79,67 @@
                           ($scope.vm.git.group || 'group')           + '/' +
                           ($scope.vm.git.repository || 'repository') + '/' +
                           'raw/' +
-                          ($scope.vm.git.branch || 'branch')               + '/' +
+                          ($scope.vm.git.branch || 'master')               + '/' +
                           ($scope.vm.git.path || 'path/to/file.raml');
                 return url;
               }
+
+      function getGitAccessToken() {
+        return '/*PLACE YOUR TOKEN HERE*/';
+      }
+
+      function getGitLocalPath() {
+        return 'git/';
+      }
+
+      function checkGroupAvailability(providedGroupName) {
+        var origin = window.location.origin;
+        var path   = window.location.pathname.split('/').slice(0, -1).join('/');
+        var groupsUrl = origin +
+                   path  + '/' +
+                   getGitLocalPath() +
+                  'api/v3/groups' + '?private_token=' + getGitAccessToken();
+
+        return $http({method: 'GET', url: groupsUrl})
+              .then(function(response) {
+                var foundGroup = null;
+                response.data.forEach(function(g) {
+                if(g.path === providedGroupName) {
+                    foundGroup = g;
+                  }
+                });
+
+                if(!foundGroup){
+                  return $q.reject('The group \'' + providedGroupName + ' \' doesn\'t exist');
+                } else {
+                  return foundGroup;
+                }
+              });
+      }
+
+      function checkRepositoryAvailability(groupId, providedRepositoryName) {
+        var origin = window.location.origin;
+        var path   = window.location.pathname.split('/').slice(0, -1).join('/');
+        var projectsUrl = origin +
+                   path  + '/' +
+                  getGitLocalPath() +
+                  'api/v3/groups/' + groupId + '?private_token=' + getGitAccessToken();
+
+        return $http({method: 'GET', url: projectsUrl})
+          .then(function(response) {
+            var foundProject = null;
+            response.data.projects.forEach(function(p) {
+              if(p.path === providedRepositoryName) {
+                foundProject = p;
+              }
+            });
+            if(!foundProject) {
+              return $q.reject('The repository \'' + providedRepositoryName + ' \' doesn\'t exist');
+            } else {
+              return foundProject;
+            }
+         });
+      }
 
       function onGitUrlChange() {
         $scope.vm.error = null;
@@ -99,7 +156,21 @@
       function loadFromGitUrl() {
         if ($scope.vm.git.group || $scope.vm.git.repository || $scope.vm.git.branch || $scope.vm.git.path) {
           $scope.vm.ramlGitUrl      = getGitProxyfiedUrl();
-          loadFromPromise(ramlParser.loadPath($scope.vm.ramlGitUrl), {isLoadingFromGitUrl: true});
+          checkGroupAvailability($scope.vm.git.group).then(
+                      function(foundGroup){
+                        return checkRepositoryAvailability(foundGroup.id, $scope.vm.git.repository);
+                      }).then(
+                        function() {
+                          loadFromPromise(ramlParser.loadPath($scope.vm.ramlGitUrl), {isLoadingFromGitUrl: true});
+                        }
+                      ).catch(
+                        function(reason) {
+                          $scope.vm.error = {'message':reason};
+                        }
+                      ).finally(function () {
+                        $scope.vm.isLoading = false;
+                        $scope.vm.isLoadedFromGitUrl = true;
+                      });
         }
       }
 
