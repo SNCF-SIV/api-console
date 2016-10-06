@@ -481,3 +481,7 @@ a.resource-path-active {
   text-align: center;
   text-rendering: optimizeLegibility;
 }
+
+.resource-pre code{
+  max-height: 700px;
+}
