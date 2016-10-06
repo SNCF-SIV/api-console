@@ -13,8 +13,12 @@
         ng-if="isXML">
       Examples are shown as JSON string for demonstrative purposes only. Actual API output will be in a different format.
     </div>
-    <pre class="raml-console-resource-pre">
-      <code class="raml-console-hljs" hljs source="getBeatifiedExample(examples[currentExample].content)"></code>
-    </pre>
+    <div ng-if="examples[currentExample].content.length > maxColorizedLines">
+      <pre class="raml-console-resource-pre"><code class="raml-console-hljs">{{examples[currentExample].content}}</code></pre>
+    </div>
+    <div ng-if="examples[currentExample].content.length < maxColorizedLines">
+      <pre class="raml-console-resource-pre"><code class="raml-console-hljs" hljs source="getBeatifiedExample(examples[currentExample].content)"></code></pre>
+    </div>
+
   </div>
 </div>

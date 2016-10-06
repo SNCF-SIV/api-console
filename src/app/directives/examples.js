@@ -13,6 +13,7 @@
         $scope.getBeatifiedExample = $scope.getBeatifiedExampleRef();
         $scope.examples = transformExample($scope.exampleContainer);
         $scope.currentExample = 0;
+        $scope.maxColorizedLines = 10000;
 
         $scope.isXML = $scope.exampleContainer.name === 'application/xml';
 
