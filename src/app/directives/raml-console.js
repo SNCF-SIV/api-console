@@ -45,6 +45,7 @@
           'disableTitle',
           'disableTryIt',
           'documentationCollapsed',
+          'tryItInitCollapse',
           'resourcesCollapsed',
           'singleView'
         ].forEach(function (property) {
