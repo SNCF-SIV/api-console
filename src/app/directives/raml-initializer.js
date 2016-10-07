@@ -208,6 +208,9 @@
 
             if (success) {
               $scope.vm.raml = api.specification;
+              setTimeout(function () {
+                   showEndpointDoc();
+              },200);
             } else {
               $scope.vm.error           = { message: 'Api contains errors.'};
               $scope.vm.codeMirror.lint = lintFromError(issues);
@@ -219,6 +222,49 @@
             $scope.vm.isLoadedFromGitUrl = options.isLoadingFromGitUrl;
           })
         ;
+      }
+
+      function showEndpointDoc() {
+        var hash = window.location.hash, endpointName, endpointButton, endpointElemParent, qLocation, verb;
+        if (!hash) {
+          return;
+        }
+        qLocation = hash.indexOf('?');
+        endpointName = qLocation > 0 ? hash.substring(0, qLocation) : hash;
+
+        //If verb is including to hash
+        var posVerb = endpointName.indexOf('@');
+        if(posVerb > 0){
+          verb = endpointName.substring(posVerb+1);
+          endpointName =  endpointName.substring(0,posVerb);
+          endpointButton = getEndpointFromHashAndVerb(endpointName,verb);
+        }else{
+          endpointButton = jQuery(endpointName + ' .raml-console-resource-list-item').first();
+        }
+
+        endpointElemParent = jQuery(endpointName).parent();
+        if (endpointButton.length < 1) {
+          return;
+        }
+        //Case endpoints container, toggle it before click on endpoint
+        if(endpointElemParent.attr('id')!=='raml-console-resources-container'){
+          endpointElemParent.parent().children().first().children().first().children().first().triggerHandler('click');
+        }
+        //Click on tab according to hash specification '@VERB'. Example #example@POST ou #example@GET
+        endpointButton.triggerHandler('click');
+      }
+
+      function getEndpointFromHashAndVerb(endpointName, verb){
+        var endpointTabs = jQuery(endpointName + ' .raml-console-tab-list .raml-console-tab'), elem, result;
+        result = jQuery(endpointName + ' .raml-console-tab-list .raml-console-tab').first();
+        endpointTabs.each(function() {
+          elem = jQuery(this);
+          if(jQuery(':first-child', elem).text()===verb){
+            result = elem;
+            return false;
+          }
+        });
+        return result;
       }
 
       function lintFromError(errors) {
