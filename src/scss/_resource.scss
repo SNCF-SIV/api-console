@@ -482,4 +482,6 @@ a.resource-path-active {
 
 .resource-pre code{
   max-height: 700px;
+  white-space: pre-wrap;
+  overflow: auto;
 }
