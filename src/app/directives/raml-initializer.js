@@ -10,8 +10,8 @@
         controller:  'RamlInitializerController'
       };
     })
-    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser','$http', '$q', function RamlInitializerController(
-      $scope, $window, ramlParser, $http, $q
+    .controller('RamlInitializerController', ['$scope', '$window', 'ramlParser','$http', '$q', '$timeout', function RamlInitializerController(
+      $scope, $window, ramlParser, $http, $q, $timeout
     ) {
       $scope.vm = {
         codeMirror: {
@@ -191,19 +191,20 @@
         return promise
           .then(function (raml) {
             $scope.vm.raml = raml;
-            setTimeout(function () {
+            $timeout(function () {
                  showEndpointDoc();
-            },200);
 
+            },200);
           })
           .catch(function (error) {
             $scope.vm.error           = error;
             $scope.vm.codeMirror.lint = lintFromError(error);
           })
           .finally(function () {
-            $scope.vm.isLoading       = false;
+            $scope.vm.isLoading = false;
             $scope.vm.isLoadedFromUrl = options.isLoadingFromUrl;
             $scope.vm.isLoadedFromGitUrl = options.isLoadingFromGitUrl;
+
           })
         ;
       }
@@ -221,10 +222,8 @@
         if(posVerb > 0){
           verb = endpointName.substring(posVerb+1);
           endpointName =  endpointName.substring(0,posVerb);
-          endpointButton = getEndpointFromHashAndVerb(endpointName,verb);
-        }else{
-          endpointButton = jQuery(endpointName + ' .raml-console-resource-list-item').first();
         }
+        endpointButton = getEndpointFromHashAndVerb(endpointName,verb);
 
         endpointElemParent = jQuery(endpointName).parent();
         if (endpointButton.length < 1) {
@@ -232,22 +231,28 @@
         }
         //Case endpoints container, toggle it before click on endpoint
         if(endpointElemParent.attr('id')!=='raml-console-resources-container'){
-          endpointElemParent.parent().children().first().children().first().children().first().triggerHandler('click');
+          $timeout(function() {
+            endpointElemParent.parent().children().first().children().first().children().first().triggerHandler('click');
+          }, 0);
         }
         //Click on tab according to hash specification '@VERB'. Example #example@POST ou #example@GET
-        endpointButton.triggerHandler('click');
+        $timeout(function() {
+            endpointButton.triggerHandler('click');
+        }, 0);
       }
 
       function getEndpointFromHashAndVerb(endpointName, verb){
         var endpointTabs = jQuery(endpointName + ' .raml-console-tab-list .raml-console-tab'), elem, result;
         result = jQuery(endpointName + ' .raml-console-tab-list .raml-console-tab').first();
-        endpointTabs.each(function() {
-          elem = jQuery(this);
-          if(jQuery(':first-child', elem).text()===verb){
-            result = elem;
-            return false;
-          }
-        });
+        if(verb!==''){
+          endpointTabs.each(function() {
+            elem = jQuery(this);
+            if(jQuery(':first-child', elem).text()===verb){
+              result = elem;
+              return false;
+            }
+          });
+        }
         return result;
       }
 
